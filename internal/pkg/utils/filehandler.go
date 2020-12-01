@@ -16,7 +16,6 @@ func fileExists(filename string) bool {
 
 //ReadRawFileContents reads a file from an arbitrary path and returns the contents
 func ReadRawFileContents(path string) ([]byte, error) {
-
 	if !fileExists(path) {
 		return nil, errors.New("File does not exist")
 	}
