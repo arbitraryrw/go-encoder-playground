@@ -39,3 +39,35 @@ func TestFileExists(t *testing.T) {
 			false)
 	}
 }
+
+func TestReadRawFileContents(t *testing.T) {
+	filePaths, err := utils.GetTestFile("basic.json")
+
+	if err != nil {
+		t.Errorf(
+			"TestFileExists() Unable to get GetTestFile(), received error %q ",
+			err)
+	}
+
+	if len(filePaths) < 1 {
+		t.Errorf(
+			"TestFileExists() Unable to get GetTestFile(), found %q  file, expected %q",
+			len(filePaths),
+			1)
+	}
+
+	fileHandle, err := utils.ReadRawFileContents(filePaths[0])
+
+	if err != nil {
+		t.Errorf(
+			"ReadRawFileContents() Unable to get ReadRawFileContents(), received error %q ",
+			err)
+	}
+
+	if len(fileHandle) < 1 {
+		t.Errorf(
+			"ReadRawFileContents(), byte length %q received for file %q. Expected >0 length.",
+			len(fileHandle),
+			filePaths[0])
+	}
+}
