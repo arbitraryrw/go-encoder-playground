@@ -73,3 +73,24 @@ func TestGetTestFileNegative(t *testing.T) {
 			len(testFileSlice))
 	}
 }
+
+func TestContainsKey(t *testing.T) {
+	expectedKeys := []string{
+		"fox",
+		"fly",
+		"snake",
+		"panther",
+	}
+
+	if utils.ContainsKey(expectedKeys, "highly unlikely this value is present") {
+		t.Errorf("containsKey() found unexpected key %q in %q ",
+			"highly unlikely this value is present",
+			expectedKeys)
+	}
+
+	if !utils.ContainsKey(expectedKeys, "panther") {
+		t.Errorf("containsKey() could not find expected key %q in %q ",
+			"panther",
+			expectedKeys)
+	}
+}
