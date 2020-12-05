@@ -66,3 +66,13 @@ func GetTestFile(partialOrFullName string) ([]string, error) {
 
 	return ruleFiles, nil
 }
+
+//ContainsKey checks if a value present in a slice
+func ContainsKey(haystack []string, needle string) bool {
+	for _, hay := range haystack {
+		if hay == needle {
+			return true
+		}
+	}
+	return false
+}
