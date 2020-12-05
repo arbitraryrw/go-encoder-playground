@@ -49,20 +49,11 @@ func TestUnmarshalJSONDataPositive(t *testing.T) {
 		"debug",
 	}
 
-	for k, v := range widget.(map[string]interface{}) {
-		if !containsKey(expectedKeys, k) {
+	for k, _ := range widget.(map[string]interface{}) {
+		if !utils.ContainsKey(expectedKeys, k) {
 			t.Errorf("Unable to find expected value %q in expected keys %q",
 				k,
 				expectedKeys)
 		}
 	}
-}
-
-func containsKey(haystack []string, needle string) bool {
-	for _, hay := range haystack {
-		if hay == needle {
-			return true
-		}
-	}
-	return false
 }
