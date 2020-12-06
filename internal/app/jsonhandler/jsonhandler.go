@@ -56,6 +56,23 @@ func UnmarshalJSONData(path string) (interface{}, error) {
 	return data, nil
 }
 
+//UnmarshalStructuredJSONData converts bytevalue to a struct
+func UnmarshalStructuredJSONData(path string) (BasicStructuredJSON, error) {
+	byteValue, err := utils.ReadRawFileContents(path)
+
+	if err != nil {
+		return BasicStructuredJSON{}, err
+	}
+
+	retStruct := BasicStructuredJSON{}
+
+	if err := json.Unmarshal(byteValue, &retStruct); err != nil {
+		return BasicStructuredJSON{}, err
+	}
+
+	return retStruct, nil
+}
+
 //PrettyPrintJSON pretty prints an unmarshalled object
 func PrettyPrintJSON(rawData interface{}) error {
 	prettyData, err := json.MarshalIndent(rawData, "", "  ")
