@@ -43,4 +43,19 @@ func TestUnmarshalXMLDataPositive(t *testing.T) {
 			xmlData.Children[1].Children[1])
 	}
 
+	expectedKeys := []string{
+		"window",
+		"image",
+		"text",
+		"debug",
+	}
+
+	for _, v := range xmlData.Children {
+		if !utils.ContainsKey(expectedKeys, v.XMLName.Local) {
+			t.Errorf("UnmarshalXMLData() unable to find expected value %q in expected keys %q",
+				v.XMLName.Local,
+				expectedKeys)
+		}
+	}
+
 }
