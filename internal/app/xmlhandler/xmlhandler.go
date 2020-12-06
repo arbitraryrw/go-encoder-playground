@@ -7,26 +7,77 @@ import (
 )
 
 //ref: https://golang.org/pkg/encoding/xml/
-
-type node struct {
+// Node is a structure for convinient parsing of XML
+type Node struct {
 	Attr     []xml.Attr
 	XMLName  xml.Name
-	Children []node `xml:",any"`
+	Children []Node `xml:",any"`
 	Text     string `xml:",chardata"`
 }
 
+// Widget is a structure for convinient parsing of XML
+// generated using https://www.onlinetool.io/xmltogo/
+type Widget struct {
+	XMLName  xml.Name `xml:"widget"`
+	Chardata string   `xml:",chardata"`
+	Debug    string   `xml:"debug"`
+	Window   struct {
+		Text   string `xml:",chardata"`
+		Title  string `xml:"title,attr"`
+		Name   string `xml:"name"`
+		Width  string `xml:"width"`
+		Height string `xml:"height"`
+	} `xml:"window"`
+	Image struct {
+		Text      string `xml:",chardata"`
+		Src       string `xml:"src,attr"`
+		Name      string `xml:"name,attr"`
+		HOffset   string `xml:"hOffset"`
+		VOffset   string `xml:"vOffset"`
+		Alignment string `xml:"alignment"`
+	} `xml:"image"`
+	Text struct {
+		Text      string `xml:",chardata"`
+		Data      string `xml:"data,attr"`
+		Size      string `xml:"size,attr"`
+		Style     string `xml:"style,attr"`
+		Name      string `xml:"name"`
+		HOffset   string `xml:"hOffset"`
+		VOffset   string `xml:"vOffset"`
+		Alignment string `xml:"alignment"`
+		OnMouseUp string `xml:"onMouseUp"`
+	} `xml:"text"`
+}
+
 //UnmarshalXMLData converts bytevalue to map
-func UnmarshalXMLData(path string) (interface{}, error) {
+func UnmarshalXMLData(path string) (Node, error) {
 	byteValue, err := utils.ReadRawFileContents(path)
 
 	if err != nil {
-		return nil, err
+		return Node{}, err
 	}
 
-	data := node{}
+	data := Node{}
 
 	if err := xml.Unmarshal(byteValue, &data); err != nil {
-		return nil, err
+		return Node{}, err
+	}
+
+	return data, nil
+}
+
+//UnmarshalStructuredXMLData converts bytevalue to map
+func UnmarshalStructuredXMLData(path string) (Widget, error) {
+	byteValue, err := utils.ReadRawFileContents(path)
+
+	if err != nil {
+		return Widget{}, err
+	}
+
+	data := Widget{}
+
+	if err := xml.Unmarshal(byteValue, &data); err != nil {
+		return Widget{}, err
 	}
 
 	return data, nil
