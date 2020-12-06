@@ -1,6 +1,7 @@
 package xmlhandler_test
 
 import (
+	"fmt"
 	"goencoderplayground/internal/app/xmlhandler"
 	"goencoderplayground/internal/pkg/utils"
 	"testing"
@@ -21,12 +22,25 @@ func TestUnmarshalXMLDataPositive(t *testing.T) {
 			len(testFilesSlice))
 	}
 
-	_, err := xmlhandler.UnmarshalXMLData(testFilesSlice[0])
+	xmlData, err := xmlhandler.UnmarshalXMLData(testFilesSlice[0])
 
 	if err != nil {
 		t.Errorf("UnmarshalXMLData() unmarshal file %q, got error: %q",
 			testFileName,
 			testFilesSlice)
+	}
+
+	if xmlData.Children[1].Children[1].XMLName.Local != "width" {
+		t.Errorf("UnmarshalXMLData() parmeter missmatch, could not find %q in %q",
+			"width",
+			xmlData.Children[1].Children[1])
+	}
+
+	if xmlData.Children[1].Children[1].Text != "500" {
+		fmt.Println("yeet")
+		t.Errorf("UnmarshalXMLData() parmeter missmatch, could not find %q in %q",
+			"500",
+			xmlData.Children[1].Children[1])
 	}
 
 }
