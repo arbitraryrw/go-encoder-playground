@@ -7,7 +7,6 @@ import (
 )
 
 func TestUnmarshalJSONDataPositive(t *testing.T) {
-
 	testFileName := "basic.json"
 
 	testFilesSlice, err := utils.GetTestFile(testFileName)
@@ -55,5 +54,36 @@ func TestUnmarshalJSONDataPositive(t *testing.T) {
 				k,
 				expectedKeys)
 		}
+	}
+}
+
+func TestUnmarshalStructedJSONDataPositive(t *testing.T) {
+
+	testFileName := "basic.json"
+
+	testFilesSlice, err := utils.GetTestFile(testFileName)
+
+	if err != nil {
+		t.Errorf("GetTestFile() unable to find test file error: %q",
+			testFilesSlice)
+	}
+
+	if len(testFilesSlice) < 1 {
+		t.Errorf("GetTestFile() less than 1 match, expected 1 got %q",
+			len(testFilesSlice))
+	}
+
+	widgetStructure, err := jsonhandler.UnmarshalStructuredJSONData(testFilesSlice[0])
+
+	if err != nil {
+		t.Errorf("UnmarshalStructuredJSONData() unmarshal file %q, got error: %q",
+			testFileName,
+			testFilesSlice)
+	}
+
+	if widgetStructure.Widget.Debug == "" {
+		t.Errorf("UnmarshalStructuredJSONData() unable to find property %q for file %q",
+			"widgetStructure.Widget.Debug",
+			testFileName)
 	}
 }
