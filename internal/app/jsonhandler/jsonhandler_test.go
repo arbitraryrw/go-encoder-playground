@@ -1,6 +1,8 @@
 package jsonhandler_test
 
 import (
+	"errors"
+	"fmt"
 	"goencoderplayground/internal/app/jsonhandler"
 	"goencoderplayground/internal/pkg/utils"
 	"testing"
@@ -58,32 +60,66 @@ func TestUnmarshalJSONDataPositive(t *testing.T) {
 }
 
 func TestUnmarshalStructedJSONDataPositive(t *testing.T) {
+	file := "invalidSyntax.json"
+	err := validateStructuredDataFormat(file)
 
-	testFileName := "basic.json"
+	if err != nil {
+		t.Errorf("UnmarshalStructedJSONData() error handinling file %q, error %q",
+			file,
+			err)
+	}
+}
 
+func TestUnmarshalStructedJSONDataNegative(t *testing.T) {
+	file := "basic.xml"
+	err := validateStructuredDataFormat(file)
+
+	if err == nil {
+		t.Errorf("UnmarshalStructedJSONData() error handinling file %q, error %q",
+			file,
+			err)
+	}
+}
+
+func validateStructuredDataFormat(testFileName string) error {
 	testFilesSlice, err := utils.GetTestFile(testFileName)
 
 	if err != nil {
-		t.Errorf("GetTestFile() unable to find test file error: %q",
+		errorText := fmt.Sprintf("GetTestFile() unable to find test file error: %q",
 			testFilesSlice)
+
+		return errors.New(errorText)
 	}
 
 	if len(testFilesSlice) < 1 {
-		t.Errorf("GetTestFile() less than 1 match, expected 1 got %q",
+		errorText := fmt.Sprintf("GetTestFile() less than 1 match, expected 1 got %q",
 			len(testFilesSlice))
+
+		return errors.New(errorText)
 	}
 
 	widgetStructure, err := jsonhandler.UnmarshalStructuredJSONData(testFilesSlice[0])
 
 	if err != nil {
-		t.Errorf("UnmarshalStructuredJSONData() unmarshal file %q, got error: %q",
+		errorText := fmt.Sprintf("UnmarshalStructuredJSONData() unmarshal file %q, got error: %q",
 			testFileName,
 			testFilesSlice)
+
+		return errors.New(errorText)
 	}
 
 	if widgetStructure.Widget.Debug == "" {
-		t.Errorf("UnmarshalStructuredJSONData() unable to find property %q for file %q",
+		errorText := fmt.Sprintf("UnmarshalStructuredJSONData() unable to find property %q for file %q",
 			"widgetStructure.Widget.Debug",
 			testFileName)
+
+		return errors.New(errorText)
 	}
+
+	return nil
+}
+
+func validateUnstructuredDataFormat(testFileName string) error {
+	//ToDo
+	return nil
 }
