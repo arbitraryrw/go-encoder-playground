@@ -70,26 +70,30 @@ func TestUnmarshalStructedJSONDataPositive(t *testing.T) {
 	}
 }
 
-func TestUnmarshalStructedJSONDataInvalidData(t *testing.T) {
-	file := "basic.xml"
-	err := validateStructuredDataFormat(file)
+func TestUnmarshalStructedJSONDataNegative(t *testing.T) {
+	negativeFiles, err := utils.GetTestFile("negative")
 
-	if err == nil {
-		t.Errorf("UnmarshalStructedJSONData() error handinling file %q, error %q",
-			file,
+	if len(negativeFiles) < 1 {
+		t.Errorf("GetTestFile() returned %q results, expected at least 1",
+			len(negativeFiles))
+	}
+
+	if err != nil {
+		t.Errorf("GetTestFile() error handinling file %q, error %q",
+			negativeFiles,
 			err)
 	}
-}
 
-func TestUnmarshalStructedJSONDataInvalidSyntax(t *testing.T) {
-	file := "invalidSyntax.xml"
-	err := validateStructuredDataFormat(file)
+	for _, file := range negativeFiles {
+		err := validateStructuredDataFormat(file)
 
-	if err == nil {
-		t.Errorf("UnmarshalStructedJSONData() error handinling file %q, error %q",
-			file,
-			err)
+		if err == nil {
+			t.Errorf("UnmarshalStructedJSONData() error handinling file %q, error %q",
+				file,
+				err)
+		}
 	}
+
 }
 
 func validateStructuredDataFormat(testFileName string) error {
